@@ -1,0 +1,10 @@
+.venv
+subtitles-creds.json
+.env
+*.mp4
+*.mov
+*.wav
+*.mp3
+__pycache__
+data/
+.DS_Store

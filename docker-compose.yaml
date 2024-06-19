@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  app:
+    image: subtitles
+    volumes:
+      - ./data:/app/data
+    environment:
+      VIDEO_PATH: /app/data/video.mp4
+      AUDIO_PATH: /app/data/audio.wav
+      SRT_PATH: /app/data/subtitles.srt
+      FINAL_OUTPUT_PATH: /app/data/final_output.mp4
+
+      # If the audio is in Hebrew and you only want to add subtitles without translation, set the TRANSLATE variable to False.
+      # TRANSLATE: 'True'
+      TRANSLATE: 'False'
+    
+      TARGET_LANGUAGE: 'en' # English
+      # TARGET_LANGUAGE: 'ar' # Arabic
+      # TARGET_LANGUAGE: 'iw' # Hebrew
+    
+      # WHISPER_MODEL_SIZE: 'tiny'
+      WHISPER_MODEL_SIZE: 'base'
+      # WHISPER_MODEL_SIZE: 'small'
+      # WHISPER_MODEL_SIZE: 'medium'
+      # WHISPER_MODEL_SIZE: 'large'
