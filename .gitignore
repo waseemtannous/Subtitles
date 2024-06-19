@@ -8,3 +8,4 @@ subtitles-creds.json
 __pycache__
 data/
 .DS_Store
+whisper_models/
