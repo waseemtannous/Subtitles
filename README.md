@@ -23,6 +23,8 @@ The project will focus one specific course, Introduction to Computer Science, an
 - `python-dotenv` for environment variables.
 - `ffmpeg` for video editing and burning subtitles to video.
 
+`.srt` is a widely used file format for subtitles.
+
 ## Whisper
 
 Whisper is a speech recognition library by OpenAI. It transcribes audio to text. It has multiple models with different sizes and accuracies.
@@ -49,5 +51,3 @@ python3 main.py
 ```
 
 The pipeline will process the video found in the `data` directory and generate subtitles according to the target language provided as an environment variable. The subtitles will be added to the video. The output video will be saved in the `data` directory alongside the `subtitles.srt` file.
-
-`.srt` is a widely used format for subtitles.
