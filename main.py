@@ -3,15 +3,17 @@ from moviepy.editor import *
 from deep_translator import GoogleTranslator
 import logging
 from time import time
+from dotenv import dotenv_values
 
 # load the environment variables
-VIDEO_PATH = os.environ['VIDEO_PATH']
-AUDIO_PATH = os.environ['AUDIO_PATH']
-SRT_PATH = os.environ['SRT_PATH']
-FINAL_OUTPUT_PATH = os.environ['FINAL_OUTPUT_PATH']
-TARGET_LANGUAGE = os.environ['TARGET_LANGUAGE']
-WHISPER_MODEL_SIZE = os.environ['WHISPER_MODEL_SIZE']
-TRANSLATE = os.environ['TRANSLATE'] == 'True'
+config = dotenv_values('.env')
+VIDEO_PATH = config['VIDEO_PATH']
+AUDIO_PATH = config['AUDIO_PATH']
+SRT_PATH = config['SRT_PATH']
+FINAL_OUTPUT_PATH = config['FINAL_OUTPUT_PATH']
+TARGET_LANGUAGE = config['TARGET_LANGUAGE']
+WHISPER_MODEL_SIZE = config['WHISPER_MODEL_SIZE']
+TRANSLATE = config['TRANSLATE'] == 'True'
 
 # extracts the audio from a video file and saves it to the specified path.
 def extract_audio_from_video(video_path, audio_path):
@@ -73,7 +75,9 @@ def create_subtitles_video(video_path, audio_path, srt_path, output_path):
 
 
 def transcribe(audio_path, whisper_model_size):
-    model = whisper.load_model(whisper_model_size)
+    logging.info(f'Loading whisper model {whisper_model_size}...')
+    model = whisper.load_model(whisper_model_size).to('cuda')
+    logging.info('Loaded whisper model!')
     result = model.transcribe(audio_path, fp16=False)
     return result['segments']
 
