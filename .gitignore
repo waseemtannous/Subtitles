@@ -1,6 +1,6 @@
 .venv
 subtitles-creds.json
-.env
+# .env
 *.mp4
 *.mov
 *.wav
