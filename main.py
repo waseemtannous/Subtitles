@@ -97,7 +97,7 @@ if __name__ == '__main__':
     start_time = time()
     logging.info('Transcribing audio...')
     segments = transcribe(AUDIO_PATH, WHISPER_MODEL_SIZE)
-    save_as_srt(segments, 'data/hebrew.srt')
+    save_as_srt(segments, 'data/original_language.srt')
     logging.info(f'Audio transcribed in {time() - start_time} seconds')
 
     if TRANSLATE:
