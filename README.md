@@ -20,8 +20,8 @@ The project will focus one specific course, Introduction to Computer Science, an
 - `moviepy` for video editing and audio extraction.
 - `whisper` for speech recognition.
 - `deep_translator` for machine translation. Specifically, the code uses Google Translate API.
+- `python-dotenv` for environment variables.
 - `ffmpeg` for video editing and burning subtitles to video.
-- `docker` for running the pipeline in a containerized environment with all dependencies.
 
 ## Whisper
 
@@ -31,26 +31,23 @@ You can find available models and sizes [here](https://github.com/openai/whisper
 
 For this project, I used the biggest one, `large`, to get the highest accuracy. It requires 10GB of vRAM to run. Use a smaller model if you have limited resources and vRAM.
 
-When whisper runs for the first time, it downloads the specified model. It takes some time to download the model. For easier use and faster development, The docker image has all the models pre-downloaded. They can also be found in the `whisper_models` directory.
+When whisper runs for the first time, it downloads the specified model. It takes some time to download the model.
 
-## Build and Run
+## Installation and Running the Pipeline
 
-The project contains a `Dockerfile` that you can use to build a container image and run the pipeline in a containerized environment. The `Dockerfile` installs all dependencies and libraries required to run the pipeline.
+Create a `data` directory in the project root and place the video you want to process in it.
 
-To build the image, run the following command:
+Double check the `.env` file and make sure the `TARGET_LANGUAGE` variable is set to the desired language (if translation is needed). Also, make sure the `WHISPER_MODEL` variable is set to the desired model that can be handled by your machine. Rename the `VIDEO_PATH` variable to the path of the video you want to process.
 
-```bash
-docker build -t subtitles .
-```
-
-Create a `data` directory in the project root and place the video you want to process in it. Docker will mount this directory to the container.
-
-A docker-compose file is also provided to run the pipeline. To run the pipeline, use the following command:
+Install `python3` and `ffmpeg` on your machine. Install the python packages and run the pipeline:
 
 ```bash
-docker-compose up
+sudo apt update
+sudo apt install python3 python3-pip ffmpeg
+pip3 install -r requirements.txt
+python3 main.py
 ```
 
-The pipeline will process the video named `video.mp4` found in the `data` directory and generate subtitles according to the target language provided as an environment variable in the docker-compose file. The subtitles will be added to the video. The output video will be saved in the `output` directory alongside the `subtitles.srt` file.
+The pipeline will process the video found in the `data` directory and generate subtitles according to the target language provided as an environment variable. The subtitles will be added to the video. The output video will be saved in the `data` directory alongside the `subtitles.srt` file.
 
 `.srt` is a widely used format for subtitles.
