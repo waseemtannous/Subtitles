@@ -85,7 +85,7 @@ ORIGINAL_SUBTITLES = "True"
 WHISPER_MODEL_SIZE = 'large-v3'
 ```
 
-Install the python packages and run the pipeline:
+Install the python packages in a seperate and clean environment and run the pipeline:
 
 ```bash
 cd Subtitles
