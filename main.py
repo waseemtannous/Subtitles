@@ -158,8 +158,13 @@ def main():
     # list all videos in the videos directory
     videos_files_paths = os.listdir(VIDEOS_PATH)
 
+    start_time = time()
+
     for video_path in videos_files_paths:
         process_video(video_path)
 
+    end_time = time()
+
+    logging.info(f'All videos processed in {end_time - start_time} seconds')
 if __name__ == '__main__':
     main()
