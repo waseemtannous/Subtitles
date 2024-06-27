@@ -4,6 +4,7 @@ from deep_translator import GoogleTranslator
 import logging
 from time import time
 from dotenv import dotenv_values
+import ffmpeg
 
 # load the environment variables
 config = dotenv_values('.env')
@@ -65,17 +66,12 @@ def create_subtitles_video(video_path, audio_path, srt_path, output_path):
     if os.path.exists(output_path):
         os.remove(output_path)
 
-    temp_file_path = 'temp_output.mp4'
-
-    # add subtitles to video
-    os.system(f'ffmpeg -i {video_path} -vf "subtitles={srt_path}:force_style=\'Fontsize=20\'" -c:a copy {temp_file_path}')
-
-    # add the audio back to the video
-    os.system(f'ffmpeg -i {temp_file_path} -i {audio_path} -c:v copy -c:a aac -b:a 192k {output_path}')
-
-    # remove the temporary video file
-    if os.path.exists(temp_file_path):
-        os.remove(temp_file_path)
+    (
+        ffmpeg
+        .input(video_path)
+        .output(output_path, vf=f"subtitles={srt_path}:force_style='Fontsize=20'", vcodec='libx264', acodec='copy')
+        .run()
+    )
 
 def transcribe(audio_path):
     result = MODEL.transcribe(audio_path, fp16=False)
@@ -166,5 +162,7 @@ def main():
     end_time = time()
 
     logging.info(f'All videos processed in {end_time - start_time} seconds')
+
+
 if __name__ == '__main__':
     main()
