@@ -13,7 +13,7 @@ This project aims to automate the process of transcribing Hebrew videos, transla
 
 Speech recognition and machine translation technologies have developed so much in recent years that it is now possible to convert speech to text, in a variety of languages, with very high accuracy, and to translate this text to a variety of languages, again with high faithfulness to the source language and fluency in the target language. The goal of this project is to develop a pipeline that uses available tools for speech recognition and machine translation and automatically adds subtitles to online courses.
 
-The project will focus one specific course, Introduction to Computer Science, and three languages: Hebrew (the original speech language), Arabic, and English (two target languages). However, the idea is to develop a fully-automated pipeline that, given a set of videos, will be able to generate subtitles in any language (either the original one or a translated one) and attache them to the video. The pipeline will then be tested on another course, Natural Language Processing.
+The project will focus on one specific course, Introduction to Computer Science, and three languages: Hebrew (the original speech language), Arabic, and English (two target languages). However, the idea is to develop a fully-automated pipeline that, given a set of videos, will be able to generate subtitles in any language (either the original or a translated one) and attaches them to the video.
 
 ## Tech Stack and Libraries
 
@@ -23,7 +23,7 @@ The project will focus one specific course, Introduction to Computer Science, an
 - `whisper` for speech recognition.
 - `deep_translator` for machine translation. Specifically, the code uses Google Translate API.
 - `python-dotenv` for environment variables.
-- `ffmpeg` for video editing and burning subtitles to video.
+- `ffmpeg` and `ffmpeg-python` for video editing and burning subtitles to video.
 
 `.srt` is a widely used file format for subtitles.
 
@@ -31,7 +31,7 @@ The project will focus one specific course, Introduction to Computer Science, an
 
 ### Transcription
 
-The transcription is performed using the Whisper model, which is loaded and used to transcribe the audio from the video files.
+The transcription is performed using the Whisper model, which is loaded offline to the GPU and used to transcribe the audio from the video files. It outputs sentences and the timing for each sentence.
 
 ### Translation
 
@@ -53,7 +53,7 @@ Whisper is a speech recognition library by OpenAI. It transcribes audio to text.
 
 You can find available models, sizes, and required resouces [here](https://github.com/openai/whisper?tab=readme-ov-file#available-models-and-languages).
 
-For this project, I used the biggest model, `large`, to get the highest accuracy. It requires 10GB of vRAM to run. Use a smaller model if you have limited resources and vRAM.
+This project uses the biggest model, `large`, to get the highest accuracy. It requires 10GB of vRAM to run. Use a smaller model if you have limited resources and vRAM. The accuracy will be lower but it will run faster.
 
 When whisper runs for the first time, it downloads the specified model. It takes some time to download the model. The model is saved in the `~/.cache/whisper` directory.
 
@@ -111,7 +111,7 @@ Populate this directory with 2 directories:
 - `data/videos`: Put the video you want to process in this directory.
 - `data/output`: empty directory to store the output videos and subtitles.
 
-An example directory is found in the [Google Drive folder](https://drive.google.com/drive/folders/1lD2icryVlPvtFsM-mRilJysx7qpLR-HH) named `data`. Download it and place it in the project root. It contains short sample videos to test the pipeline.
+An example directory `data` is found in the [Google Drive folder](https://drive.google.com/drive/folders/1lD2icryVlPvtFsM-mRilJysx7qpLR-HH) named `data`. Download it and place it in the project root. It contains short sample videos to test the pipeline.
 
 Review the `.env` file and make sure the right environment variables are set. Example:
 
@@ -151,7 +151,7 @@ pip3 install -r requirements.txt
 python3 main.py
 ```
 
-The pipeline will process all the videos in the `data/videos` directory. It will extract the audio, transcribe it to text, translate the text to all target languages, and generate subtitles. It will also create a video with the subtitles burned in.
+The pipeline will process all the videos in the `data/videos` directory. It will extract the audio, transcribe it to text, translate the text to all target languages, and generate subtitles. It will also create a video with the subtitles burned in. The output will be saved in the `data/output` an it contains the video with captions, raw audio file, and the srt files for each language.
 
 ## Notes
 
@@ -183,9 +183,9 @@ The pipeline will process all the videos in the `data/videos` directory. It will
 
 Average runtime for a 16 minutes video running at 720p and 60fps using whisper's largest model:
 
-- Audio extraction: 3 seconds
-- Transcription (offline): 3:20 minutes
-- Translation (1 language - online): 1 minute
-- Subtitles burning (1 srt file): 1:40 minutes
+- Audio extraction: `3 seconds`
+- Transcription (offline): `3:20 minutes`
+- Translation (1 language - online): `1:30 minutes`
+- Subtitles burning (1 srt file): `1:40 minutes`
 
-Total runtime for the same video in Hebrew, translated to Arabic and English, and burned subtitles for the 3 languages:
+Total runtime for the same video in Hebrew, translated to Arabic and English, and burned subtitles for the 3 languages: `13 minutes`
